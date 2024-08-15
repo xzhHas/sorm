@@ -2,7 +2,11 @@
 
 > 基于Golang写的orm框架
 
-获取sorm包：`go get github.com/xzhHas/sorm`
+获取sorm包：
+
+```
+go get -u github.com/xzhHas/sorm
+```
 
 ---
 
