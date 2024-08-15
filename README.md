@@ -1,1 +1,12 @@
-# 项目自述文件
+# sorm
+
+> 基于Golang写的orm框架
+
+获取sorm包：`go get github.com/xzhHas/sorm`
+
+---
+
+## 使用方式
+
+### 增删改查
+
