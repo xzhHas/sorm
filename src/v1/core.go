@@ -3,8 +3,8 @@ package v1
 import (
 	"context"
 	"database/sql"
-	"sorm/src/v1/internal/valuer"
-	"sorm/src/v1/model"
+	"github.com/xzhHas/sorm/src/v1/internal/valuer"
+	"github.com/xzhHas/sorm/src/v1/model"
 )
 
 // core 作为 orm 库的核心组件设计，封装一些基础服务和配置，以支持更高级别的数据库交互操作

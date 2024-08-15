@@ -2,7 +2,7 @@ package valuer
 
 import (
 	"database/sql"
-	"sorm/src/v1/model"
+	"github.com/xzhHas/sorm/src/v1/model"
 )
 
 // Value 是对结构体实例的内部抽象

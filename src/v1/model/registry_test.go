@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/stretchr/testify/assert"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
 	"reflect"
-	"sorm/src/v1/internal/errs"
 	"testing"
 )
 

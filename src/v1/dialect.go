@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
 )
 
 var (

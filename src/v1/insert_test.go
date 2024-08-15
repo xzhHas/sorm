@@ -3,7 +3,7 @@ package v1
 import (
 	"database/sql"
 	"github.com/stretchr/testify/assert"
-	"sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
 	"testing"
 )
 

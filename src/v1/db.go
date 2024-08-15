@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"database/sql/driver"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/internal/valuer"
+	"github.com/xzhHas/sorm/src/v1/model"
 	"log"
-	"sorm/src/v1/internal/errs"
-	"sorm/src/v1/internal/valuer"
-	"sorm/src/v1/model"
 	"time"
 )
 

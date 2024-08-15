@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	"sorm/src/v1/model"
+	"github.com/xzhHas/sorm/src/v1/model"
 )
 
 // QueryContext 代表执行数据库查询时的上下文信息

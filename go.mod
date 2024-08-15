@@ -1,4 +1,4 @@
-module sorm
+module github.com/xzhHas/sorm
 
 go 1.22.3
 

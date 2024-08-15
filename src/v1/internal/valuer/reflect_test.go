@@ -2,8 +2,8 @@ package valuer
 
 import (
 	"database/sql/driver"
-	"sorm/src/v1/internal/errs"
-	"sorm/src/v1/internal/test"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/internal/test"
 	"testing"
 )
 

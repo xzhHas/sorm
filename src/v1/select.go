@@ -3,7 +3,7 @@ package v1
 import (
 	"context"
 	"database/sql"
-	"sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
 )
 
 // Selector 是一个泛型结构体，用于构建和执行数据库查询

@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	"sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
 )
 
 // Updater 结构体表示一个用于执行数据库更新操作的对象

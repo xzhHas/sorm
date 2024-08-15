@@ -2,8 +2,8 @@ package v1
 
 import (
 	"context"
-	"sorm/src/v1/internal/errs"
-	"sorm/src/v1/model"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/model"
 )
 
 // UpsertBuilder (加载拦截器)定义了一个用于构建 upsert 操作的对象

@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
-	"sorm/src/v1/internal/errs"
-	"sorm/src/v1/internal/valuer"
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
+	"github.com/xzhHas/sorm/src/v1/internal/valuer"
 	"testing"
 )
 

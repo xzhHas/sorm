@@ -1,8 +1,8 @@
 package model
 
 import (
+	"github.com/xzhHas/sorm/src/v1/internal/errs"
 	"reflect"
-	"sorm/src/v1/internal/errs"
 	"strings"
 	"sync"
 	"unicode"
