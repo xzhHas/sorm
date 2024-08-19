@@ -2,7 +2,6 @@ package sorm
 
 import (
 	"context"
-	"database/sql"
 	"github.com/xzhHas/sorm/internal/errs"
 )
 
@@ -275,34 +274,38 @@ func (s *Selector[T]) Get(ctx context.Context) (*T, error) {
 		Builder: s,
 		Type:    "SELECT",
 	})
-	// 检查查询结果，如果结果不为空，则返回结果对象和可能的错误
 	if res.Result != nil {
 		return res.Result.(*T), res.Err
 	}
-	// 如果结果为空，可能是因为没有找到数据或发生了错误，返回 nil 和可能的错误
 	return nil, res.Err
 }
 
-// GetMulti 根据提供的上下文从数据库中获取多个实体
-// 该方法首先构建查询，然后使用该查询从数据库中检索数据
+//func (s *Selector[T]) GetMulti(ctx context.Context) ([]*T, error) {
+//	q, err := s.Build()
+//	if err != nil {
+//		return nil, err
+//	}
+//	rows, err := s.sess.QueryContext(ctx, q.SQL, q.Args...)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	for rows.Next() {
+//		// 在这里构造 []*T
+//	}
+//	panic("implement me")
+//}
+
 func (s *Selector[T]) GetMulti(ctx context.Context) ([]*T, error) {
-	// 定义一个未指定类型的 SQL.DB 实例，用于执行查询
-	var db sql.DB
-	// 调用 Build 方法构造一个查询
-	q, err := s.Build()
-	if err != nil {
-		return nil, err
+	// 调用 getMulti 函数执行查询操作，传入上下文对象、core、sess 和查询上下文
+	res := getMulti[T](ctx, s.core, s.sess, &QueryContext{
+		Builder: s,
+		Type:    "SELECT",
+	})
+	if res.Result != nil {
+		return res.Result.([]*T), res.Err
 	}
-	// 使用上下文执行构造的查询，并获取结果集
-	rows, err := db.QueryContext(ctx, q.SQL, q.Args...)
-	if err != nil {
-		return nil, err
-	}
-	for rows.Next() {
-		// TODO: 在这里构造 []*T
-	}
-	// 提醒开发者此处需要实现具体的逻辑来构造返回值
-	panic("implement me")
+	return nil, res.Err
 }
 
 // NewSelector 创建并返回一个新的 Selector 实例

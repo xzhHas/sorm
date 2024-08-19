@@ -11,6 +11,7 @@ type Value interface {
 	Field(name string) (any, error)
 	// SetColumns 设置新值
 	SetColumns(rows *sql.Rows) error
+	Value()
 }
 
 type Creator func(val any, meta *model.Model) Value

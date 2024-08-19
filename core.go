@@ -3,6 +3,7 @@ package sorm
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/xzhHas/sorm/internal/valuer"
 	"github.com/xzhHas/sorm/model"
 )
@@ -28,15 +29,7 @@ type core struct {
 	ms []Middleware
 }
 
-// getHandler 根据提供的查询上下文执行数据库查询，并将结果映射到指定的结构体类型 T。
-// 这个函数展示了如何构建查询、执行查询，并将查询结果映射到一个泛型类型 T 的实例。
-// 参数:
-// - ctx: 上下文对象，用于控制请求的生命周期。
-// - sess: 数据库会话对象，用于执行查询。
-// - c: 包含映射和值创建逻辑的核心对象。
-// - qc: 包含查询构建器和上下文信息的查询上下文对象。
-// 返回值:
-// - *QueryResult: 包含查询结果和可能的错误信息的指针。
+// getHandler 根据提供的查询上下文执行数据库查询，并将结果映射到指定的结构体类型 T
 func getHandler[T any](ctx context.Context, sess session, c core, qc *QueryContext) *QueryResult {
 	q, err := qc.Builder.Build()
 	if err != nil {
@@ -73,22 +66,73 @@ func getHandler[T any](ctx context.Context, sess session, c core, qc *QueryConte
 	}
 }
 
-// get 函数用于执行查询操作，它支持泛型参数 T，可以处理不同类型的查询请求。
-// 参数:
-//   - ctx: 上下文对象，用于传递请求相关的状态和配置。
-//   - c: 核心逻辑对象，包含查询所需的必要信息。
-//   - sess: 会话对象，用于管理与数据库的交互。
-//   - qc: 查询上下文，包含查询的详细配置和状态。
-//
-// 返回值:
-//   - *QueryResult: 查询结果的指针，包含查询操作的结果数据和状态。
+// get 函数用于执行查询操作，它支持泛型参数 T，可以处理不同类型的查询请求
 func get[T any](ctx context.Context, c core, sess session, qc *QueryContext) *QueryResult {
 	var handler HandleFunc = func(ctx context.Context, qc *QueryContext) *QueryResult {
 		return getHandler[T](ctx, sess, c, qc)
 	}
-	// 获取中间件列表，中间件用于在查询处理前后执行额外的逻辑
 	ms := c.ms
-	// 逆序遍历中间件列表，将每个中间件的处理逻辑与当前处理器组合
+	for i := len(ms) - 1; i >= 0; i-- {
+		handler = ms[i](handler)
+	}
+	return handler(ctx, qc)
+}
+func getMultiHandler[T any](ctx context.Context, sess session, c core, qc *QueryContext) *QueryResult {
+	q, err := qc.Builder.Build()
+	if err != nil {
+		return &QueryResult{
+			Err: err,
+		}
+	}
+
+	rows, err := sess.queryContext(ctx, q.SQL, q.Args...)
+	if err != nil {
+		return &QueryResult{
+			Err: err,
+		}
+	}
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			fmt.Printf("rows close failed，err：%v", err)
+		}
+	}(rows)
+
+	var results []*T
+	for rows.Next() {
+		tp := new(T)
+		meta, err := c.r.Get(tp)
+		if err != nil {
+			return &QueryResult{
+				Err: err,
+			}
+		}
+		val := c.valCreator(tp, meta)
+		err = val.SetColumns(rows)
+		if err != nil {
+			return &QueryResult{
+				Err: err,
+			}
+		}
+		results = append(results, tp)
+	}
+
+	if err = rows.Err(); err != nil {
+		return &QueryResult{
+			Err: err,
+		}
+	}
+
+	return &QueryResult{
+		Result: results,
+	}
+}
+
+func getMulti[T any](ctx context.Context, c core, sess session, qc *QueryContext) *QueryResult {
+	var handler HandleFunc = func(ctx context.Context, qc *QueryContext) *QueryResult {
+		return getMultiHandler[T](ctx, sess, c, qc)
+	}
+	ms := c.ms
 	for i := len(ms) - 1; i >= 0; i-- {
 		handler = ms[i](handler)
 	}
